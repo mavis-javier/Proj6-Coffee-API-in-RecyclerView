@@ -13,13 +13,21 @@ import okhttp3.Headers
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var coffeeList: MutableList<String>
+    private lateinit var coffeeImgList: MutableList<String>
     private lateinit var rvCoffee: RecyclerView
+
+    // added features different from lab
+    private lateinit var coffeeTitleList: MutableList<String>
+    private lateinit var coffeeDescriptionList: MutableList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
         rvCoffee = findViewById(R.id.coffee_list)
-        coffeeList = mutableListOf()
+        coffeeImgList = mutableListOf()
+        coffeeTitleList = mutableListOf()
+        coffeeDescriptionList = mutableListOf()
 
         getCoffeeImageURL()
     }
@@ -30,13 +38,18 @@ class MainActivity : AppCompatActivity() {
         client["https://api.sampleapis.com/coffee/hot/", object : JsonHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Headers, json: JSON) {
                 Log.d("Coffee", "response successful")
-                val coffeeImageArray = json.jsonArray.getJSONObject()
-                for (i in 0 until coffeeImageArray.length()) {
-                    coffeeList.add(coffeeImageArray.getString(i))
+                val coffeeArray = json.jsonArray
+                Log.d("coffee image link", coffeeArray.getJSONObject(1).getString("image"))
+
+                for (i in 1 until coffeeArray.length()) {
+                    coffeeImgList.add(coffeeArray.getJSONObject(i).getString("image"))
+                    coffeeTitleList.add(coffeeArray.getJSONObject(i).getString("title"))
+                    coffeeDescriptionList.add(coffeeArray.getJSONObject(i).getString("description"))
+
+                    val adapter = CoffeeAdapter(coffeeImgList, coffeeTitleList, coffeeDescriptionList)
+                    rvCoffee.adapter = adapter
+                    rvCoffee.layoutManager = LinearLayoutManager(this@MainActivity)
                 }
-                val adapter = CoffeeAdapter(coffeeList)
-                rvCoffee.adapter = adapter
-                rvCoffee.layoutManager = LinearLayoutManager(this@MainActivity)
             }
 
             override fun onFailure(
