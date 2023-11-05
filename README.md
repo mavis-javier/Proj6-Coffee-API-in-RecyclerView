@@ -8,7 +8,7 @@ Time spent: **8** hours spent in total
 
 ## Summary
 
-**Coffee API in RecyclerView** is an android app that **This app that displays a scrollable list of coffee images with its name and description from the Coffee API")**
+**Coffee API in RecyclerView** is an android app that **This app that displays a scrollable list of coffee images with its name and description from the Coffee API**
 
 If I had to describe this project in three (3) emojis, they would be: **😤😓🤑**
 
